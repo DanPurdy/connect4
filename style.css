@@ -1,0 +1,143 @@
+/*
+
+Four in a line game
+
+Dan Purdy
+www.dpurdy.me
+
+*/
+
+/* =Reset
+--------------------------------------------------------------*/
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {
+	border: 0;
+	font-family: inherit;
+	font-size: 100%;
+	font-style: inherit;
+	font-weight: inherit;
+	margin: 0;
+	outline: 0;
+	padding: 0;
+	vertical-align: baseline;
+	zoom: 1;
+}
+
+html {
+	font-size: 62.5%; /* Corrects text resizing oddly in IE6/7 when body font-size is set using em units http://clagnut.com/blog/348/#c790 */
+
+-ms-overflow-y: scroll;
+	overflow-y: scroll; /* Keeps page centred in all browsers regardless of content height */
+-webkit-text-size-adjust: 100%; /* Prevents iOS text size adjust after orientation change, without disabling user zoom */
+-ms-text-size-adjust: 100%; /* www.456bereastreet.com/archive/201012/controlling_text_size_in_safari_for_ios_without_disabling_user_zoom/ */
+height: 100%;
+}
+
+body {
+	background: #000;
+	height: 100%;
+	color: #fff;
+}
+
+article,aside,details,figcaption,figure,footer,header,nav,section {
+	display: block;
+}
+
+ol,ul {
+	list-style: none;
+}
+
+table {
+	/* tables still need 'cellspacing="0"' in the markup */
+border-collapse: separate;
+	border-spacing: 0;
+}
+
+caption,th,td {
+	font-weight: normal;
+	text-align: left;
+}
+
+blockquote:before,blockquote:after,q:before,q:after {
+	content: "";
+}
+
+blockquote,q {
+	quotes: "" "";
+}
+
+:focus {
+	outline: 0;
+}
+
+a {
+	text-decoration: none;
+	color: #fff;
+	cursor: pointer;
+
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+
+a:focus {
+	outline: none;
+}
+
+a:hover,a:active {
+	/* Improves readability when focused and also mouse hovered in all browsers people.opera.com/patrickl/experiments/keyboard/test */
+outline: 0;
+	color: #fc9a00;
+}
+
+a img {
+	border: 0;
+}
+
+figure {
+	margin: 0;
+}
+
+
+/* =Game
+------------------------------------------- */
+
+.wrapper{
+	max-width: 400px;
+	margin:0 auto;
+	padding:15% 0;
+}
+.play-area{
+	position:relative;
+	width:350px;
+	height:400px;
+	margin:0 auto;
+}
+.game{
+	position:relative;
+	top:100px;
+	width:350px;
+	height:300px;
+	background:url(img/board.png);
+	z-index: 999;
+}
+
+.piece{
+	position:absolute;
+	width:50px;
+	height:50px;
+	z-index: 0;
+	top:0;
+	border-radius:25px;
+}
+
+
+.red{
+	background-color: red;
+}
+
+.yellow{
+	background-color: yellow;
+}
+
