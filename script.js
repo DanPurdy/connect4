@@ -111,7 +111,8 @@ var game = {
 
 		this.checkHorizontal();
 		this.checkVertical();
-		this.checkDiagonal();
+		this.checkSWNE();
+		this.checkSENW();
 	},
 
 	checkY: function(){
@@ -158,9 +159,60 @@ var game = {
 			}
 		console.log(this.score);
 	},
-	checkDiagonal: function(){
-		var count =0;
-		//minimum point bottom left is minX = math.max(currentX - 3),0  minY = math.max(currentY -3),0
+	checkSWNE: function(){
+		
+		this.resetScore();
+
+		//South West - North East
+
+		
+		max = Math.min((this.board.length-1)-this.currentX, (this.board[0].length-1)-this.currentY);
+		min = Math.min(this.currentX, this.currentY);
+		steps = min + max + 1;
+
+		maxX = this.currentX + max;
+		maxY = this.currentY + max;
+		minX = this.currentX - min;
+		minY = this.currentY - min;
+		console.log(steps);
+		for(i=0; i<steps; i++){
+			if(this.board[minX][minY] == this.player){
+				if(++this.score[this.player-1]>=4){
+					console.log('win diag SW-NE Player: '+this.player);
+					break;
+				}
+
+			}else{
+				this.score[this.player-1]=0;
+			}
+
+			minX++;
+			minY++;
+
+		}
+
+
+		console.log(this.score);
+
+
+	},
+
+	checkSENW: function(){
+		
+		this.resetScore();
+
+		//South East - North West
+
+		
+		
+
+
+		console.log(this.score);
+
+
+	}
+
+	//minimum point bottom left is minX = math.max(currentX - 3),0  minY = math.max(currentY -3),0
 		//max point top right is maxX = math.min(current x+3), 6 maxY = math.min(currentY+3),5
 		//steps = 
 
@@ -168,10 +220,6 @@ var game = {
 
 		//min point bottom right is math.min(currentX+3),6 math.max(currentY-3),0
 		//max point top left is math.max(current x-3),0  math.min(current y+3),5
-
-		
-
-	}
 	
 };
 
