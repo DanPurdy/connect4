@@ -6,8 +6,8 @@ var game = {
 	board: [[],[],[],[],[],[],[]],
 	currentX: 0,
 	currentY: 0,
-	direction: '',
-	player:1,
+	player: 1,
+	winFlag: 0,
 	score: [0,0],
 	active: false,
 
@@ -20,6 +20,7 @@ var game = {
 	},
 
 	newTurn: function(){
+		$('.play-area').prepend('<div class="piece '+that.color[that.player-1]+'"></div>');
 		this.active=false;
 		this.setPiece();
 		this.currentX=0;
@@ -30,7 +31,6 @@ var game = {
 			this.player--;
 		}
 		this.registerHandle();
-
 		this.resetScore();
 
 	},
@@ -38,6 +38,21 @@ var game = {
 	resetScore: function(){
 		this.score[0]=0;
 		this.score[1]=0;
+	},
+
+	resetGame: function(){
+		this.currentX=0;
+		this.currentY=0;
+		this.winFlag =0;
+		$('.piece').remove();
+		this.setupBoard();
+		this.player=1;
+		$('.play-area').prepend('<div class="piece red"></div>');
+		this.active=false;
+		this.setPiece();
+		this.registerHandle();
+		this.resetScore();
+		
 	},
 
 	setupBoard: function(){
@@ -75,7 +90,7 @@ var game = {
 	},
 
 	registerHandle: function(){
-
+		$('.piece').off('click');
 		var that = this;
 		this.$piece.on('click', function(){
 			that.active=true;
@@ -83,9 +98,7 @@ var game = {
 
 				that.val= 350 - (that.currentY * 50);
 				$(this).animate({top: that.val}, function(){
-					$('.play-area').prepend('<div class="piece '+that.color[that.player-1]+'"></div>');
 					that.logPiece();
-					that.newTurn();
 				});
 			}
 		});
@@ -107,12 +120,18 @@ var game = {
 
 	logPiece: function(){
 		this.board[this.currentX][this.currentY] = this.player;
-		console.log(this.board);
-
 		this.checkHorizontal();
 		this.checkVertical();
 		this.checkSWNE();
 		this.checkSENW();
+
+		if(this.winFlag === 1){
+			this.announceWin(this.player);
+		}else{
+			this.newTurn();
+		}
+
+
 	},
 
 	checkY: function(){
@@ -132,14 +151,13 @@ var game = {
 			for(i =0; i<this.board.length; i++){
 				if(this.board[i][this.currentY] == this.player){
 					if(++this.score[this.player-1]>=4){
-						console.log('win Horizontal! Player: '+this.player);
+						this.winFlag = 1;
 						break;
 					}
 				} else {
 					this.score[this.player-1] = 0;
 				}
 			}
-		console.log(this.score);
 
 	},
 
@@ -150,14 +168,13 @@ var game = {
 		for(i =0; i<this.board[this.currentX].length; i++){
 				if(this.board[this.currentX][i] == this.player){
 					if(++this.score[this.player-1]>=4){
-						console.log('win Vertical! Player: '+this.player);
+						this.winFlag = 1;
 						break;
 					}
 				} else {
 					this.score[this.player-1] = 0;
 				}
 			}
-		console.log(this.score);
 	},
 	checkSWNE: function(){
 		
@@ -165,35 +182,14 @@ var game = {
 
 		//South West - North East
 
-		
 		max = Math.min((this.board.length-1)-this.currentX, (this.board[0].length-1)-this.currentY);
 		min = Math.min(this.currentX, this.currentY);
 		steps = min + max + 1;
 
-		maxX = this.currentX + max;
-		maxY = this.currentY + max;
 		minX = this.currentX - min;
 		minY = this.currentY - min;
-		console.log(steps);
-		for(i=0; i<steps; i++){
-			if(this.board[minX][minY] == this.player){
-				if(++this.score[this.player-1]>=4){
-					console.log('win diag SW-NE Player: '+this.player);
-					break;
-				}
 
-			}else{
-				this.score[this.player-1]=0;
-			}
-
-			minX++;
-			minY++;
-
-		}
-
-
-		console.log(this.score);
-
+		this.checkDiag(minX, minY, steps, false);
 
 	},
 
@@ -203,28 +199,53 @@ var game = {
 
 		//South East - North West
 
-		
-		
+		max = Math.min(this.currentY, (this.board.length-1)-this.currentX);
+		min = Math.min((this.board[0].length-1)-this.currentY, this.currentX);
+		steps= min + max +1;
+
+		maxX = this.currentX + max;
+		minX = this.currentX - min;
+
+		this.checkDiag(maxX, minY, steps, true);
 
 
-		console.log(this.score);
+	},
 
+	checkDiag: function(x, y, steps, sE){
+
+		for(i=0; i<steps; i++){
+			if(this.board[x][y] == this.player){
+				if(++this.score[this.player-1]>=4){
+					this.winFlag = 1;
+					break;
+				}
+
+			}else{
+				this.score[this.player-1]=0;
+			}
+
+			if(sE === true){
+				x--;
+			}else{
+				x++;
+			}
+			y++;
+
+		}
+	},
+
+	announceWin: function(playerNum){
+
+		alert('Player '+playerNum+' WINS!!! ');
+
+		this.resetGame();
 
 	}
 
-	//minimum point bottom left is minX = math.max(currentX - 3),0  minY = math.max(currentY -3),0
-		//max point top right is maxX = math.min(current x+3), 6 maxY = math.min(currentY+3),5
-		//steps = 
-
-		//OR
-
-		//min point bottom right is math.min(currentX+3),6 math.max(currentY-3),0
-		//max point top left is math.max(current x-3),0  math.min(current y+3),5
 	
 };
 
 $(document).ready(function(){
 	game.init();
 
-	console.log();
 });
