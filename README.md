@@ -1,4 +1,4 @@
 connect4
 ========
 
-A conenct 4 style game in javascript
+A connect 4 style game in javascript
