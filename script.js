@@ -13,10 +13,21 @@ var game = {
 
 
 	init: function(){
+		$('.play-area').prepend('<div class="piece red"></div>');
+		this.currentX=0;
+		this.currentY=0;
+		this.winFlag =0;
+		this.player=1;
 		this.setPiece();
 		this.registerButtons();
 		this.registerHandle();
 		this.setupBoard();
+	},
+
+	newGame: function(){
+		$('.piece').remove();
+		this.init();
+		
 	},
 
 	newTurn: function(){
@@ -40,21 +51,6 @@ var game = {
 		this.score[1]=0;
 	},
 
-	resetGame: function(){
-		this.currentX=0;
-		this.currentY=0;
-		this.winFlag =0;
-		$('.piece').remove();
-		this.setupBoard();
-		this.player=1;
-		$('.play-area').prepend('<div class="piece red"></div>');
-		this.active=false;
-		this.setPiece();
-		this.registerHandle();
-		this.resetScore();
-		
-	},
-
 	setupBoard: function(){
 		for (var x = 0; x < 7; x++) {
 			for (var y = 0; y < 6; y++) {
@@ -70,6 +66,10 @@ var game = {
 	registerButtons: function(){
 
 		that = this;
+		if(typeof $(window).keydown == 'function'){
+			$(window).off('keydown');
+			console.log('removing window event');
+		}
 
 		$(window).keydown(function(event){
 			//37 left 39 right
@@ -234,11 +234,12 @@ var game = {
 		}
 	},
 
+	
 	announceWin: function(playerNum){
 
 		alert('Player '+playerNum+' WINS!!! ');
 
-		this.resetGame();
+		this.newGame();
 
 	}
 
